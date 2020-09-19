@@ -5,7 +5,10 @@ VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UDP-Server", "UDP-Server\UDP-Server.csproj", "{F6AD8849-9B34-4D89-BED4-DA787DB7B498}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UDP-Client", "UDP-Client\UDP-Client.csproj", "{8CC88144-F1BB-49EC-867E-D996AFBFFED8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UDP-Client", "UDP-Client\UDP-Client.csproj", "{8CC88144-F1BB-49EC-867E-D996AFBFFED8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F6AD8849-9B34-4D89-BED4-DA787DB7B498} = {F6AD8849-9B34-4D89-BED4-DA787DB7B498}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
