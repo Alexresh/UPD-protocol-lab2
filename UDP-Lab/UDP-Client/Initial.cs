@@ -19,9 +19,13 @@ namespace UDP_Client
                 byte[] bytes = Encoding.UTF8.GetBytes("0");
                 client.Send(bytes, bytes.Length, endPoint);
                 IPEndPoint server = null;
+                byte[] receiveTimeOut = client.Receive(ref server);
+                //получаем время получения след. вопроса
+                client.Client.ReceiveTimeout = int.Parse(Encoding.UTF8.GetString(receiveTimeOut))+1000;
                 byte[] receivePlayer = client.Receive(ref server);
                 string player = Encoding.UTF8.GetString(receivePlayer);
                 Console.WriteLine(player);
+
                 bool game = true;
                 while (game)
                 {
@@ -70,7 +74,7 @@ namespace UDP_Client
             }
             catch (SocketException)
             {
-                Console.WriteLine("Соединение не было установлено");
+                Console.WriteLine("Пакет не получен");
             }
             finally
             {
