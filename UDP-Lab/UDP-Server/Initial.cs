@@ -13,6 +13,9 @@ namespace UDP_Server
         private static readonly UdpClient server = new UdpClient(1337);
         private static bool first = false;
         private static bool fastGame = false;
+        const int tenSecond = 10000;
+        const int oneMinute = 60000;
+        const int twentySecond = 20000;
         private static readonly List<Client> clients = new List<Client>();
         private static readonly List<Question> questions = new List<Question>()
         {
@@ -29,7 +32,7 @@ namespace UDP_Server
                 fastGame = true;
             }
             
-            server.Client.ReceiveTimeout = fastGame==true ? 10*1000 : 60*1000;
+            server.Client.ReceiveTimeout = fastGame==true ? tenSecond : oneMinute;
             Console.Title = "Server";
             Console.WriteLine($"Ожидание игроков {server.Client.ReceiveTimeout/1000} секунд");
 
@@ -39,7 +42,9 @@ namespace UDP_Server
                 while (true)
                 {
                     byte[] receiveBytes = server.Receive(ref RemoteIpEndPoint);
-
+                    //отправка продолжительности хода
+                    byte[] sendSeconds = Encoding.UTF8.GetBytes(server.Client.ReceiveTimeout.ToString());
+                    server.Send(sendSeconds,sendSeconds.Length,RemoteIpEndPoint);
                     clients.Add(new Client(RemoteIpEndPoint));
                     SendMessage($"Ты теперь в теле Игрок{clients.Count}", clients[^1]);
                     Console.ForegroundColor = ConsoleColor.Green;
@@ -111,7 +116,7 @@ namespace UDP_Server
 
         private static void ReceiveAnswer()
         {
-            server.Client.ReceiveTimeout = fastGame == true ? 10 * 1000 : 20 * 1000;
+            server.Client.ReceiveTimeout = fastGame == true ? tenSecond : twentySecond;
             IPEndPoint remoteIp = null;
             byte[] receiveBytes = server.Receive(ref remoteIp);
             int receiveAnswer = int.Parse(Encoding.UTF8.GetString(receiveBytes));
